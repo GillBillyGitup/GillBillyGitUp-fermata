@@ -1,0 +1,59 @@
+from tkinter import *
+from PIL import Image, ImageTk
+import time
+import random
+
+class FermataApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Fermata on Every Note")
+
+        # Load sheet music image
+        self.sheet_music_image = Image.open("sheet_music.png")  # Replace with your sheet music image path
+        self.sheet_music_photo = ImageTk.PhotoImage(self.sheet_music_image)
+
+        # Create canvas to display sheet music
+        self.canvas = Canvas(root, width=self.sheet_music_image.width, height=self.sheet_music_image.height)
+        self.canvas.create_image(0, 0, anchor="nw", image=self.sheet_music_photo)
+        self.canvas.pack()
+
+        # Initialize variables
+        self.current_note = 0
+        self.notes = list(range(1, 10))  # Example: 9 notes on the sheet music
+        self.instruments = ["Piano", "Violin", "Guitar", "Flute"]
+        self.current_instrument = random.choice(self.instruments)
+        self.fermata_duration = 1  # Duration of fermata in seconds
+
+        # Create labels
+        self.instrument_label = Label(root, text=f"Current Instrument: {self.current_instrument}")
+        self.instrument_label.pack()
+
+        # Bind user input (tap event)
+        self.root.bind("<Button-1>", self.play_note) 
+
+    def play_note(self, event):
+        """Simulates playing a note with fermata."""
+        if self.current_note < len(self.notes):
+            # Highlight current note on sheet music (optional)
+            # ...
+
+            # Display instrument and note information
+            print(f"Playing note {self.current_note + 1} with {self.current_instrument}")
+
+            # Simulate fermata (pause)
+            time.sleep(self.fermata_duration)
+
+            # Update current note
+            self.current_note += 1
+
+            # Change instrument randomly (optional)
+            self.current_instrument = random.choice(self.instruments)
+            self.instrument_label.config(text=f"Current Instrument: {self.current_instrument}")
+
+        else:
+            print("All notes played!")
+
+if __name__ == "__main__":
+    root = Tk()
+    app = FermataApp(root)
+    root.mainloop()
